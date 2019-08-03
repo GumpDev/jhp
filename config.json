@@ -1,0 +1,13 @@
+{
+    "address":{
+        "ip":"localhost",
+        "port" : "8000"
+    },
+    "files":{
+        "serverFolder": "public_html/",
+        "index_file": "index.html",
+        "withoutExtension": [
+            "html"
+        ]
+    }
+}
