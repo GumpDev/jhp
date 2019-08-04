@@ -37,21 +37,16 @@ Exemple:
     
 
 #### Address Config
-   **IP** - Server ip
-   
-   **Port** - Server port
+   * **IP** - Server ip
+   * **Port** - Server port
    
     
 #### Files Config
-   **Server Folder** - Server Folder where will be your .html or .jhp files
-   
-   **Index File** - Index File of your Server
-   
-   **Without Extension** - Remove fil extension from url
-   
-   **Types** - Define type for each Extension
-   
-   **Errors** - Define errors pages
+   * **Server Folder** - Server Folder where will be your .html or .jhp files
+   * **Index File** - Index File of your Server
+   * **Without Extension** - Remove fil extension from url
+   * **Types** - Define type for each Extension
+   * **Errors** - Define errors pages
    
     
 #### Hash Code
