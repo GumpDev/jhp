@@ -3,6 +3,9 @@
 This project it's made to help make website with node.js*
 
 
+--------------------
+
+
 ### How to Use 
 To make a JHP server you need [Node.JS](https://nodejs.org/en/)
 
@@ -24,6 +27,9 @@ Exemple:
 `<jhp>
     echo($_FS.readdirSync('.')); //Will read the server directory and print in the client screen.
 </jhp>`
+
+
+--------------------
 
 
 ### Configuration
@@ -50,7 +56,10 @@ Exemple:
     
 #### Hash Code
    Define a Hash Code to your server, when you use $_HASH(string)
-   
+  
+  
+--------------------
+ 
     
 ### Variables
    **$_FS** - It's the fs from node.js
@@ -60,9 +69,15 @@ Exemple:
    **$_CONFIG** - It's the config file of the server
    
     
+--------------------
+
+    
 ### Functions
    **echo(string)** - It's print a string in the client screen
    
+   
+--------------------
+
     
 ### We are working on
    * GET/POST Requests
@@ -72,7 +87,12 @@ Exemple:
    * More error pages
    * Visual Studio And Sublime Text Extension to Interpret .jhp file
     
+    
+--------------------
+
+    
 ### Our Team
    ![Hetrodo](https://avatars0.githubusercontent.com/u/48604350?s=60&v=4) Eduardo 'hetrodo' Leite
    ![Gump](https://avatars3.githubusercontent.com/u/29582336?s=60&v=4) Gustavo 'Gump' Paes
+   
    *Help us make this big project, send your Pull Request to join in*
