@@ -18,6 +18,8 @@ const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
         _SYSTEMRESPONSE.end(_SYSTEMREADFILE($_RESPONSES[_SYSTEMREQUEST.url]));
     else
         _SYSTEMRESPONSE.end(_SYSTEMREADFILE($_RESPONSES[$_CONFIG.files.errors['404']]));
+        
+    $_REMOTEADDR = _SYSTEMREQUEST.connection.remoteAddress;
 });
 
 $_SERVER.listen($_CONFIG.address.port, $_CONFIG.address.ip, () => {
@@ -142,6 +144,7 @@ function $_GETBETWEEN(str, tag0, tag1)
     return Results;
 }
 
+var $_REMOTEADDR = "";
 var $_EVAL_BUFFER = [];
 
 function echo(str)

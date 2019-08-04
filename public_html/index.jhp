@@ -8,13 +8,7 @@
 </head>
 <body>
     <jhp>
-        var x = $_HASH('teste de texto',Math.random() * 100);
-        echo(x);
-
-        for(var i = 0; i < 10000; i++)
-        {
-            echo("<br>" + i);
-        }
+        echo("Hello World!");
     </jhp>
 </body>
 </html>
