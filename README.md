@@ -33,7 +33,7 @@ Exemple:
 
 
 ### Configuration
-    To edit Configurations open the config.json
+   * To edit Configurations open the config.json
     
 
 #### Address Config
@@ -50,25 +50,23 @@ Exemple:
    
     
 #### Hash Code
-   Define a Hash Code to your server, when you use $_HASH(string)
+   * Define a Hash Code to your server, when you use $_HASH(string)
   
   
 --------------------
  
     
 ### Variables
-   **$_FS** - It's the fs from node.js
-   
-   **$_HTTP** - It's the http from node.js
-   
-   **$_CONFIG** - It's the config file of the server
+   * **$_FS** - It's the fs from node.js
+   * **$_HTTP** - It's the http from node.js
+   * **$_CONFIG** - It's the config file of the server
    
     
 --------------------
 
     
 ### Functions
-   **echo(string)** - It's print a string in the client screen
+   * **echo(string)** - It's print a string in the client screen
    
    
 --------------------
@@ -87,7 +85,7 @@ Exemple:
 
     
 ### Our Team
-   ![Hetrodo](https://avatars0.githubusercontent.com/u/48604350?s=60&v=4) Eduardo 'hetrodo' Leite
-   ![Gump](https://avatars3.githubusercontent.com/u/29582336?s=60&v=4) Gustavo 'Gump' Paes
+   * ![Hetrodo](https://avatars0.githubusercontent.com/u/48604350?s=60&v=4) Eduardo 'hetrodo' Leite
+   * ![Gump](https://avatars3.githubusercontent.com/u/29582336?s=60&v=4) Gustavo 'Gump' Paes
    
    *Help us make this big project, send your Pull Request to join in*
