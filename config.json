@@ -1,13 +1,29 @@
 {
     "address":{
-        "ip":"localhost",
-        "port" : "8000"
+        "ip": "localhost",
+        "port": "8000"
     },
     "files":{
-        "serverFolder": "public_html/",
-        "index_file": "index.html",
-        "withoutExtension": [
-            "html"
-        ]
-    }
+        "server_folder": "public_html/",
+        "index_file": "index.jhp",
+        "without_extension": [
+            "jhp"
+        ],
+        "types" : {
+            "txt": "text/plain",
+            "htm": "text/html",
+            "html": "text/html",
+            "jhp": "text/html",
+            "jpg": "image/jpeg",
+            "jpeg": "image/jpeg",
+            "png": "image/png",
+            "css": "text/css",
+            "js": "text/javascript",
+            "json": "application/json"
+        },
+        "errors":{
+            "404": "404.html"
+        }
+    },
+    "hashCode": "2"
 }
