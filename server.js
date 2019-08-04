@@ -59,20 +59,15 @@ function _SYSTEMREADFILE(file){
 function _SYSTEMRUNJHP($_SYSTEMFILE){
     var $_FILECONTENT = $_SYSTEMFILE;
 
-    while($_FILECONTENT.includes("<jhp>"))
-        $_FILECONTENT = $_FILECONTENT.replace("<jhp>", "█");
-    while($_FILECONTENT.includes("</jhp>"))
-        $_FILECONTENT = $_FILECONTENT.replace("</jhp>", "█");
-
-    var $_JPHCODE = $_GETBETWEEN($_FILECONTENT, "█");
+    var $_JPHCODE = $_GETBETWEEN($_FILECONTENT, "<jhp>", "</jhp>");
 
     for(var $_SYSTEMX = 0; $_SYSTEMX < $_JPHCODE.length; $_SYSTEMX++){
         try{ eval($_JPHCODE[$_SYSTEMX]); } catch(e){ echo(e.toString()); }
         $_FILECONTENT = $_FILECONTENT.toString().replace($_JPHCODE[$_SYSTEMX], $_GET_EVAL_BUFFER());
     }
 
-    while($_FILECONTENT.includes("█"))
-        $_FILECONTENT = $_FILECONTENT.replace("█", "");
+    while($_FILECONTENT.includes("<jhp>") || $_FILECONTENT.includes("</jhp>"))
+        $_FILECONTENT = $_FILECONTENT.replace("<jhp>", "").replace("</jhp>", ""); 
 
     return Buffer.from($_FILECONTENT, 'utf8');
 }
@@ -103,7 +98,7 @@ function $_HASH(txt,seed){
     return _SYSTEMHASHRETURN2;
 }
 
-function $_GETBETWEEN(str, keychar)
+function $_GETBETWEEN(str, tag0, tag1)
 {
     var Results = [];
 
@@ -112,31 +107,51 @@ function $_GETBETWEEN(str, keychar)
 
     for(var i = 0; i < str.length; i++)
     {
-        if(str[i] == keychar && !closed)
+        var tag0_match = "";
+        for(var j = 0; j < tag0.length; j++)
+        {
+            if((i+j) < str.length)
+                tag0_match += str[i+j];
+            else
+                break;
+        }
+
+
+        var tag1_match = "";
+        for(var j = 0; j < tag1.length; j++)
+        {
+            if((i+j) < str.length)
+                tag1_match += str[i+j];
+            else
+                break;
+        }
+
+
+        if(tag0_match == tag0 && closed)
+        {
+            closed = false;
+            fo = i + (tag0.length-1);
+        }
+        if(tag1_match == tag1 && !closed)
         {
             Results.push(str.substring(fo + 1, i));
             closed = true;
-        }
-        else if(str[i] == keychar && closed)
-        {
-            closed = false;
-            fo = i;
         }
     }
 
     return Results;
 }
 
-var $_EVAL_BUFFER = "";
+var $_EVAL_BUFFER = [];
 
 function echo(str)
 {
-    $_EVAL_BUFFER += str;
+    $_EVAL_BUFFER.push(str);
 }
 
 function $_GET_EVAL_BUFFER()
 {
     var temp = $_EVAL_BUFFER;
-    $_EVAL_BUFFER = "";
-    return temp;
+    $_EVAL_BUFFER = [];
+    return temp.join("");
 }
