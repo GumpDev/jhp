@@ -58,30 +58,21 @@ function _SYSTEMREADFILE(file){
 
 function _SYSTEMRUNJHP($_SYSTEMFILE){
     var $_FILECONTENT = $_SYSTEMFILE;
-    var $_ASSOCTAGSFILE = [];
 
-    if($_FILECONTENT.split("<jhp>").length > 1){
-        var $_SYSTEMJHPVALUES = $_FILECONTENT.toString().match(/<jhp>(.|\s)*<\/jhp>/).map(function(val){
-            $_ASSOCTAGSFILE.push(val);
-            return val.replace(/<\/?jhp>/g,'');
-        });
-    }
-    for(var $_SYSTEMX = 0; $_SYSTEMX < $_SYSTEMJHPVALUES.length; $_SYSTEMX++){
-        eval($_SYSTEMJHPVALUES[$_SYSTEMX]);
-        $_FILECONTENT = $_FILECONTENT.toString().replace($_ASSOCTAGSFILE[$_SYSTEMX],'');
+    while($_FILECONTENT.includes("<jhp>"))
+        $_FILECONTENT = $_FILECONTENT.replace("<jhp>", "█");
+    while($_FILECONTENT.includes("</jhp>"))
+        $_FILECONTENT = $_FILECONTENT.replace("</jhp>", "█");
+
+    var $_JPHCODE = $_GETBETWEEN($_FILECONTENT, "█");
+
+    for(var $_SYSTEMX = 0; $_SYSTEMX < $_JPHCODE.length; $_SYSTEMX++){
+        try{ eval($_JPHCODE[$_SYSTEMX]); } catch(e){ echo(e.toString()); }
+        $_FILECONTENT = $_FILECONTENT.toString().replace($_JPHCODE[$_SYSTEMX], $_GET_EVAL_BUFFER());
     }
 
-    $_ASSOCTAGSFILE = [];
-    if($_FILECONTENT.split("<jhs>").length > 1){
-        var $_SYSTEMJHPVALUES = $_FILECONTENT.toString().match(/<jhs>(.*?)<\/jhs>/g).map(function(val){
-            $_ASSOCTAGSFILE.push(val);
-            return val.replace(/<\/?jhs>/g,'');
-        });
-    }
-    for(var $_SYSTEMX = 0; $_SYSTEMX < $_SYSTEMJHPVALUES.length; $_SYSTEMX++){
-        var $_FILERESULT = eval($_SYSTEMJHPVALUES[$_SYSTEMX]);
-        $_FILECONTENT = $_FILECONTENT.toString().replace($_ASSOCTAGSFILE[$_SYSTEMX],$_FILERESULT.toString().replace('undefined',''));
-    }
+    while($_FILECONTENT.includes("█"))
+        $_FILECONTENT = $_FILECONTENT.replace("█", "");
 
     return Buffer.from($_FILECONTENT, 'utf8');
 }
@@ -110,4 +101,42 @@ function $_HASH(txt,seed){
             _SYSTEMHASHRETURN2 += "0";
     }
     return _SYSTEMHASHRETURN2;
+}
+
+function $_GETBETWEEN(str, keychar)
+{
+    var Results = [];
+
+    var closed = true;
+    var fo = 0;
+
+    for(var i = 0; i < str.length; i++)
+    {
+        if(str[i] == keychar && !closed)
+        {
+            Results.push(str.substring(fo + 1, i));
+            closed = true;
+        }
+        else if(str[i] == keychar && closed)
+        {
+            closed = false;
+            fo = i;
+        }
+    }
+
+    return Results;
+}
+
+var $_EVAL_BUFFER = "";
+
+function echo(str)
+{
+    $_EVAL_BUFFER += str;
+}
+
+function $_GET_EVAL_BUFFER()
+{
+    var temp = $_EVAL_BUFFER;
+    $_EVAL_BUFFER = "";
+    return temp;
 }
