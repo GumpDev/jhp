@@ -3,28 +3,54 @@ const $_FS = require('fs');
 const $_CONFIG = require('./config.json');
 const $_RESPONSES = [];
 
+var $_POST;
+var $_GET;
+var $_URL;
+
 const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
     _SYSTEMMAPFOLDER($_CONFIG.files.server_folder);
 
-    $_RESPONSES['/'] = $_CONFIG.files.server_folder + "/" + $_CONFIG.files.index_file;
-    
-    if($_RESPONSES[_SYSTEMREQUEST.url] != undefined){
-        $_URLEXT = $_RESPONSES[_SYSTEMREQUEST.url].split('.')[1];
-        _SYSTEMRESPONSE.writeHead(200, {'Content-Type': $_CONFIG.files.types[$_URLEXT] || $_CONFIG.files.types['txt']});
-    }else
-        _SYSTEMRESPONSE.writeHead(200, {'Content-Type': $_CONFIG.files.types['html']});
+    $_URL = _SYSTEMREQUEST.url.split('?')[0];
 
-    if($_RESPONSES[_SYSTEMREQUEST.url] != undefined)
-        _SYSTEMRESPONSE.end(_SYSTEMREADFILE($_RESPONSES[_SYSTEMREQUEST.url]));
-    else
-        _SYSTEMRESPONSE.end(_SYSTEMREADFILE($_RESPONSES[$_CONFIG.files.errors['404']]));
+    $_GET = {};
+    if(_SYSTEMREQUEST.url.includes('?')){
+        for(var i = 0; i < _SYSTEMREQUEST.url.split('?')[1].split("&").length; i++)
+            $_GET[_SYSTEMREQUEST.url.split('?')[1].split('=')[0]] = _SYSTEMREQUEST.url.split('?')[1].split('=')[1]; 
+    }
+    
+    var $_POSTString = "";
+    _SYSTEMREQUEST.on("data", function (chunk) {
+        $_POSTString += chunk;
+        $_POST = {};
+
+        for(var i = 0; i < $_POSTString.split('&').length; i++)
+            $_POST[$_POSTString.split('&')[i].split('=')[0]] = $_POSTString.split('&')[i].split('=')[1];
         
+    });
+
     $_REMOTEADDR = _SYSTEMREQUEST.connection.remoteAddress;
+
+    $_RESPONSES['/'] = $_CONFIG.files.server_folder + "/" + $_CONFIG.files.index_file;
+    _SYSTEMREQUEST.on("end", function(){
+        if($_RESPONSES[$_URL] != undefined){
+            $_URLEXT = $_RESPONSES[$_URL].split('.')[1];
+            _SYSTEMRESPONSE.writeHead(200, {'Content-Type': $_CONFIG.files.types[$_URLEXT] || $_CONFIG.files.types['txt']});
+        }else
+            _SYSTEMRESPONSE.writeHead(200, {'Content-Type': $_CONFIG.files.types['html']});
+
+        if($_RESPONSES[$_URL] != undefined)
+            _SYSTEMRESPONSE.end(_SYSTEMREADFILE($_RESPONSES[$_URL]));
+        else
+            _SYSTEMRESPONSE.end(_SYSTEMREADFILE($_RESPONSES[$_CONFIG.files.errors['404']]));
+    });
 });
 
 $_SERVER.listen($_CONFIG.address.port, $_CONFIG.address.ip, () => {
-    console.log(`Your server is running in http://${$_CONFIG.address.ip}:${$_CONFIG.address.port}`);
-    console.log('To stop: ctrl + c');
+    console.log(" ");
+    console.log("                 JHP Server Started!");
+    console.log(`   Your server is running in http://${$_CONFIG.address.ip}:${$_CONFIG.address.port}`);
+    console.log("   Help us in GitHub: https://github.com/GumpFlash/jhp");
+    console.log(" ");
 });
 
 function _SYSTEMMAPFOLDER(folder){
