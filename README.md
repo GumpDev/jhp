@@ -60,6 +60,8 @@ Exemple:
    * **$_FS** - It's the fs from node.js
    * **$_HTTP** - It's the http from node.js
    * **$_CONFIG** - It's the config file of the server
+   * **$_GET** - It's GET values
+   * **$_POST** - It's POST values
    
     
 --------------------
@@ -73,10 +75,9 @@ Exemple:
 
     
 ### We are working on
-   * GET/POST Requests
+   * Include Command
    * MySql Server
    * MySql Compatible
-   * Include Command
    * More error pages
    * Visual Studio And Sublime Text Extension to Interpret .jhp file
     
