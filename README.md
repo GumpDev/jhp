@@ -1,6 +1,6 @@
 # JHP - Javascript Hypertext Preprocessor
-*JHP it's is like PHP but to Node.Js
-This project it's made to help make website with node.js*
+*JHP is like PHP but using javascript
+This project is made to help making websites with node.js*
 
 
 --------------------
@@ -20,12 +20,12 @@ After you install Node.JS copy
 Open a CMD and type `npm start`
 
 
-For compile the Node.JS commands, you need make a file with extension .jhp, and open the tag <jhp>, inside it you can put NodeJs Commands.
+To execute Node.JS commands, you need to make a file with .jhp extension , and use the tag <jhp>, inside it you can put NodeJs Commands.
 
 
 Exemple:
 `<jhp>
-    echo($_FS.readdirSync('.')); //Will read the server directory and print in the client screen.
+    echo($_FS.readdirSync('.')); //Read the server directory and print in the client screen.
 </jhp>`
 
 
@@ -60,8 +60,8 @@ Exemple:
    * **$_FS** - It's the fs from node.js
    * **$_HTTP** - It's the http from node.js
    * **$_CONFIG** - It's the config file of the server
-   * **$_GET** - It's GET values
-   * **$_POST** - It's POST values
+   * **$_GET** - Variable to get GET values
+   * **$_POST** - Variable to get POST values
    * **$_URL** - Get the URL after '/'
    * **$_FULLURL** - Get the full URL
    
@@ -70,7 +70,7 @@ Exemple:
 
     
 ### Functions
-   * **echo(string)** - It's print a string in the client screen
+   * **echo(string)** - print a string in the html result `aka echo from php´
    
    
 --------------------
