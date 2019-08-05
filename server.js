@@ -6,11 +6,13 @@ const $_RESPONSES = [];
 var $_POST;
 var $_GET;
 var $_URL;
+var $_FULLURL;
 
 const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
     _SYSTEMMAPFOLDER($_CONFIG.files.server_folder);
 
     $_URL = _SYSTEMREQUEST.url.split('?')[0];
+    $_FULLURL =  $_CONFIG.address.port != 80 ? $_CONFIG.address.ip + ":" + $_CONFIG.address.port + $_URL : $_CONFIG.address.ip + $_URL;
 
     $_GET = {};
     if(_SYSTEMREQUEST.url.includes('?')){

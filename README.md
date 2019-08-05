@@ -62,6 +62,8 @@ Exemple:
    * **$_CONFIG** - It's the config file of the server
    * **$_GET** - It's GET values
    * **$_POST** - It's POST values
+   * **$_URL** - Get the URL after '/'
+   * **$_FULLURL** - Get the full URL
    
     
 --------------------

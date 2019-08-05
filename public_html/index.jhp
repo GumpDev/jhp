@@ -5,14 +5,16 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Teste HTML</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <style>
+        pre{
+            display: inline
+        }
+    </style>
 </head>
 <body>
     <jhp>
-        echo("Hello World!");
+        echo("Hello World!<br>");
+        echo("This server is running in <pre>http://" + $_FULLURL + "</pre>");
     </jhp>
-    <form method="POST">
-        <input type="text" name="texto" id="texto">
-        <input type="submit" name="submit" id="submit">
-    </form>
 </body>
 </html>

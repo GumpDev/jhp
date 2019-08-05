@@ -1,7 +1,7 @@
 {
     "address":{
         "ip": "localhost",
-        "port": "8000"
+        "port": "80"
     },
     "files":{
         "server_folder": "public_html/",
