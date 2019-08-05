@@ -9,8 +9,6 @@
 <body>
     <jhp>
         echo("Hello World!");
-        echo("GET:"+$_GET['texto']);
-        echo("POST:"+$_POST['texto']);
     </jhp>
     <form method="POST">
         <input type="text" name="texto" id="texto">
