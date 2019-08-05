@@ -7,6 +7,8 @@ var $_POST;
 var $_GET;
 var $_URL;
 var $_FULLURL;
+var $_REMOTEADDR;
+var $_EVAL_BUFFER;
 
 const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
     _SYSTEMMAPFOLDER($_CONFIG.files.server_folder);
@@ -43,7 +45,7 @@ const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
         if($_RESPONSES[$_URL] != undefined)
             _SYSTEMRESPONSE.end(_SYSTEMREADFILE($_RESPONSES[$_URL]));
         else
-            _SYSTEMRESPONSE.end(_SYSTEMREADFILE($_RESPONSES[$_CONFIG.files.errors['404']]));
+            _SYSTEcMRESPONSE.end(_SYSTEMREADFILE($_RESPONSES[$_CONFIG.files.errors['404']]));
     });
 });
 
@@ -92,12 +94,12 @@ function _SYSTEMRUNJHP($_SYSTEMFILE){
     var $_JPHCODE = $_GETBETWEEN($_FILECONTENT, "<jhp>", "</jhp>");
 
     for(var $_SYSTEMX = 0; $_SYSTEMX < $_JPHCODE.length; $_SYSTEMX++){
-        try{ eval($_JPHCODE[$_SYSTEMX]); } catch(e){ echo(e.toString()); }
-        $_FILECONTENT = $_FILECONTENT.toString().replace($_JPHCODE[$_SYSTEMX], $_GET_EVAL_BUFFER());
+        try{ echo(eval($_JPHCODE[$_SYSTEMX])); } catch(e){ echo(e.toString()); }
+        $_FILECONTENT = $_FILECONTENT.toString().replace("<jhp>" + $_JPHCODE[$_SYSTEMX] + "</jhp>", $_GET_EVAL_BUFFER());
     }
 
-    while($_FILECONTENT.includes("<jhp>") || $_FILECONTENT.includes("</jhp>"))
-        $_FILECONTENT = $_FILECONTENT.replace("<jhp>", "").replace("</jhp>", ""); 
+    if($_FILECONTENT.includes("<jhp>") || $_FILECONTENT.includes("</jhp>"))
+        console.log("[Warning] The result still has jhp tags inside it.");
 
     return Buffer.from($_FILECONTENT, 'utf8');
 }
@@ -172,11 +174,11 @@ function $_GETBETWEEN(str, tag0, tag1)
     return Results;
 }
 
-var $_REMOTEADDR = "";
-var $_EVAL_BUFFER = [];
-
 function echo(str)
 {
+    if($_EVAL_BUFFER == undefined)
+        $_EVAL_BUFFER = [];
+
     $_EVAL_BUFFER.push(str);
 }
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Teste HTML</title>
+    <title>Hi <jhp>$_REMOTEADDR;</jhp> - Teste HTML</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <style>
         pre{
@@ -14,7 +14,7 @@
 <body>
     <jhp>
         echo("Hello World!<br>");
-        echo("This server is running in <pre>http://" + $_FULLURL + "</pre>");
+        echo("This server is running at <pre>http://" + $_FULLURL + "</pre>");
     </jhp>
 </body>
 </html>
