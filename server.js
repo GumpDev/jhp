@@ -45,7 +45,7 @@ const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
         if($_RESPONSES[$_URL] != undefined)
             _SYSTEMRESPONSE.end(_SYSTEMREADFILE($_RESPONSES[$_URL]));
         else
-            _SYSTEcMRESPONSE.end(_SYSTEMREADFILE($_RESPONSES[$_CONFIG.files.errors['404']]));
+            _SYSTEMRESPONSE.end(_SYSTEMREADFILE($_RESPONSES[$_CONFIG.files.errors['404']]));
     });
 });
 
