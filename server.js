@@ -1,20 +1,23 @@
 const $_HTTP = require('http');
 const $_FS = require('fs');
+const $_PATH = require('path')
 const $_CONFIG = require('./config.json');
-const $_RESPONSES = [];
 
 var $_POST;
 var $_GET;
-var $_URL;
-var $_FULLURL;
+var $_REQUEST;
+var $_REQUESTURL;
 var $_REMOTEADDR;
 var $_EVAL_BUFFER;
 
 const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
-    _SYSTEMMAPFOLDER($_CONFIG.files.server_folder);
+    console.log(new Date().getMinutes() + ":" + new Date().getSeconds() + ":" + new Date().getMilliseconds());
 
-    $_URL = _SYSTEMREQUEST.url.split('?')[0];
-    $_FULLURL =  $_CONFIG.address.port != 80 ? $_CONFIG.address.ip + ":" + $_CONFIG.address.port + $_URL : $_CONFIG.address.ip + $_URL;
+    var $_STATUS = 200;
+
+    $_REQUEST = _SYSTEMREQUEST.url.split('?')[0];
+    $_REQUESTURL =  $_CONFIG.address.port != 80 ? $_CONFIG.address.ip + ":" + $_CONFIG.address.port + $_REQUEST : $_CONFIG.address.ip + $_REQUEST;
+    $_REMOTEADDR = _SYSTEMREQUEST.connection.remoteAddress;
 
     $_GET = {};
     if(_SYSTEMREQUEST.url.includes('?')){
@@ -32,20 +35,37 @@ const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
         
     });
 
-    $_REMOTEADDR = _SYSTEMREQUEST.connection.remoteAddress;
+    //Open dir index
+    if($_FS.lstatSync($_CONFIG.files.server_folder + "/" + $_REQUEST).isDirectory())
+        $_REQUEST += "/" + $_CONFIG.files.index_file;
 
-    $_RESPONSES['/'] = $_CONFIG.files.server_folder + "/" + $_CONFIG.files.index_file;
+    //Escape request
+    $_REQUEST = _ESCAPEREQUEST($_REQUEST);
+
+    //whitelist check
+    var d_whitel = $_CONFIG.files.whitelist[$_PATH.dirname($_REQUEST)];
+    var f_whitel = $_CONFIG.files.whitelist[$_PATH.basename($_REQUEST)];
+    
+    if(d_whitel == "block" || f_whitel == "block"){
+        $_REQUEST = $_CONFIG.files.errors['deny'];
+        $_STATUS = 200;
+    }
+
+    //append server directory
+    $_REQUEST = _ESCAPEREQUEST($_CONFIG.files.server_folder + "/" + $_REQUEST);
+
+    //Validate File
+    if(!$_FS.existsSync($_REQUEST)){
+        $_REQUEST = $_CONFIG.files.server_folder + "/" + $_CONFIG.files.errors['404'];
+        $_STATUS = 404;
+    }
+
     _SYSTEMREQUEST.on("end", function(){
-        if($_RESPONSES[$_URL] != undefined){
-            $_URLEXT = $_RESPONSES[$_URL].split('.')[1];
-            _SYSTEMRESPONSE.writeHead(200, {'Content-Type': $_CONFIG.files.types[$_URLEXT] || $_CONFIG.files.types['txt']});
-        }else
-            _SYSTEMRESPONSE.writeHead(200, {'Content-Type': $_CONFIG.files.types['html']});
+        $_URLEXT = $_REQUEST.split('.')[1];
+        _SYSTEMRESPONSE.writeHead($_STATUS, {'Content-Type': $_CONFIG.files.types[$_URLEXT] || $_CONFIG.files.types['txt']});
+        _SYSTEMRESPONSE.end(_SYSTEMREADFILE($_REQUEST));
 
-        if($_RESPONSES[$_URL] != undefined)
-            _SYSTEMRESPONSE.end(_SYSTEMREADFILE($_RESPONSES[$_URL]));
-        else
-            _SYSTEMRESPONSE.end(_SYSTEMREADFILE($_RESPONSES[$_CONFIG.files.errors['404']]));
+        console.log(new Date().getMinutes() + ":" + new Date().getSeconds() + ":" + new Date().getMilliseconds());
     });
 });
 
@@ -57,20 +77,16 @@ $_SERVER.listen($_CONFIG.address.port, $_CONFIG.address.ip, () => {
     console.log(" ");
 });
 
-function _SYSTEMMAPFOLDER(folder){
-    const $_DIR = $_FS.readdirSync(folder);
-    const $_FOLDERNAME = folder.split($_CONFIG.files.server_folder)[1];
-    for(var _dirX = 0; _dirX < $_DIR.length; _dirX++){
-        if($_DIR[_dirX].includes(".")){
-            $_EXTENSION = $_DIR[_dirX].split('.')[1];
+function _ESCAPEREQUEST(str){
+    var result = "";
 
-            if($_CONFIG.files.without_extension.includes($_EXTENSION))
-                $_RESPONSES["/"+$_FOLDERNAME+$_DIR[_dirX].split('.')[0]] = folder + $_DIR[_dirX];
-            else
-                $_RESPONSES["/"+$_FOLDERNAME+$_DIR[_dirX]] = folder + $_DIR[_dirX];
-        }else
-            _SYSTEMMAPFOLDER(folder + $_DIR[_dirX] + "/");
-    }
+    for(var i = 0; i < str.length; i++)
+        if(str[i] == "/" && str[i-1] != "/")
+            result += str[i];
+        else if(str[i] != "/")
+            result += str[i];
+
+    return result;
 }
 
 function _SYSTEMREADFILE(file){
