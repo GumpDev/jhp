@@ -54,6 +54,14 @@ Exemple:
   
   
 --------------------
+  
+  
+### Tags
+    <jhp>(nodejs commands)</jhp> - Executes Node.js commands inside this tag
+    <include>(path)</include> - Read and Print a File in the Script
+  
+  
+--------------------
  
     
 ### Variables
@@ -77,10 +85,9 @@ Exemple:
 
     
 ### We are working on
-   * Include Command
+   * More shortcuts
    * MySql Server
    * MySql Compatible
-   * More error pages
    * Visual Studio And Sublime Text Extension to Interpret .jhp file
     
     
