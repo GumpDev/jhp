@@ -16,6 +16,9 @@
         echo("Hello World!");
         echo("<br>Request: " + $_REQUEST);
         echo("<br>This server is running at <pre>http://" + $_REQUESTURL + "</pre>");
+
+        echo("<br><br>Included code:");
+         <include>public_html/test.jhp</include>
     </jhp>
 </body>
 </html>

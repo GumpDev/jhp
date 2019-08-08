@@ -34,7 +34,7 @@ const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
     });
 
     //Validate request
-    if($_FS.existsSync($_REQUEST)){
+    if($_FS.existsSync($_CONFIG.files.server_folder + "/" + $_REQUEST)){
         //Open dir index
         if($_FS.lstatSync($_CONFIG.files.server_folder + "/" + $_REQUEST).isDirectory())
             $_REQUEST += "/" + $_CONFIG.files.index_file;
@@ -51,8 +51,9 @@ const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
             $_STATUS = 200;
         }
 
-        if($_FS.existsSync($_REQUEST))
+        if(!$_FS.existsSync($_CONFIG.files.server_folder + "/" + $_REQUEST))
             _THROW404();
+
     }
     else _THROW404();
 
@@ -110,11 +111,28 @@ function _SYSTEMREADFILE(file){
 function _SYSTEMRUNJHP($_SYSTEMFILE){
     var $_FILECONTENT = $_SYSTEMFILE;
 
-    var $_JPHCODE = $_GETBETWEEN($_FILECONTENT, "<jhp>", "</jhp>");
+    var $_JHPCODE = $_GETBETWEEN($_FILECONTENT, "<jhp>", "</jhp>");
 
-    for(var $_SYSTEMX = 0; $_SYSTEMX < $_JPHCODE.length; $_SYSTEMX++){
-        try{ echo(eval($_JPHCODE[$_SYSTEMX])); } catch(e){ echo(e.toString()); }
-        $_FILECONTENT = $_FILECONTENT.toString().replace("<jhp>" + $_JPHCODE[$_SYSTEMX] + "</jhp>", $_GET_EVAL_BUFFER());
+    for(var $_SYSTEMX = 0; $_SYSTEMX < $_JHPCODE.length; $_SYSTEMX++){
+        //Get all include tags
+        var $_JHPINCLUDE = $_GETBETWEEN($_JHPCODE[$_SYSTEMX], "<include>", "</include>");
+
+        //Loop through all tags
+        for(var $_INCLUDE_INDEX = 0; $_INCLUDE_INDEX < $_JHPINCLUDE.length; $_INCLUDE_INDEX++){
+            //Read tag's target file and get its jhp code
+            var tempcode = $_GETBETWEEN($_FS.readFileSync($_JHPINCLUDE[$_INCLUDE_INDEX]).toString(), "<jhp>", "</jhp>");
+
+            for(var tempcodeI = 0; tempcodeI < tempcode.length; tempcodeI++){
+                //Replace the previous loaded code into the original requested code
+                var updatedCode = $_JHPCODE[$_SYSTEMX].replace("<include>" + $_JHPINCLUDE[$_INCLUDE_INDEX] + "</include>", tempcode[tempcodeI]);
+                $_FILECONTENT = $_FILECONTENT.replace($_JHPCODE[$_SYSTEMX], updatedCode);
+                $_JHPCODE[$_SYSTEMX] = updatedCode;
+            }
+        }
+
+        //"Compile" code
+        try{ echo(eval($_JHPCODE[$_SYSTEMX])); } catch(e){ echo(e.toString()); }
+        $_FILECONTENT = $_FILECONTENT.toString().replace("<jhp>" + $_JHPCODE[$_SYSTEMX] + "</jhp>", $_GET_EVAL_BUFFER());
     }
 
     if($_FILECONTENT.includes("<jhp>") || $_FILECONTENT.includes("</jhp>"))
@@ -149,18 +167,15 @@ function $_HASH(txt,seed){
     return _SYSTEMHASHRETURN2;
 }
 
-function $_GETBETWEEN(str, tag0, tag1)
-{
+function $_GETBETWEEN(str, tag0, tag1){
     var Results = [];
 
     var closed = true;
     var fo = 0;
 
-    for(var i = 0; i < str.length; i++)
-    {
+    for(var i = 0; i < str.length; i++){
         var tag0_match = "";
-        for(var j = 0; j < tag0.length; j++)
-        {
+        for(var j = 0; j < tag0.length; j++){
             if((i+j) < str.length)
                 tag0_match += str[i+j];
             else
@@ -169,8 +184,7 @@ function $_GETBETWEEN(str, tag0, tag1)
 
 
         var tag1_match = "";
-        for(var j = 0; j < tag1.length; j++)
-        {
+        for(var j = 0; j < tag1.length; j++){
             if((i+j) < str.length)
                 tag1_match += str[i+j];
             else
@@ -178,13 +192,11 @@ function $_GETBETWEEN(str, tag0, tag1)
         }
 
 
-        if(tag0_match == tag0 && closed)
-        {
+        if(tag0_match == tag0 && closed){
             closed = false;
             fo = i + (tag0.length-1);
         }
-        if(tag1_match == tag1 && !closed)
-        {
+        if(tag1_match == tag1 && !closed){
             Results.push(str.substring(fo + 1, i));
             closed = true;
         }
@@ -193,16 +205,14 @@ function $_GETBETWEEN(str, tag0, tag1)
     return Results;
 }
 
-function echo(str)
-{
+function echo(str){
     if($_EVAL_BUFFER == undefined)
         $_EVAL_BUFFER = [];
 
     $_EVAL_BUFFER.push(str);
 }
 
-function $_GET_EVAL_BUFFER()
-{
+function $_GET_EVAL_BUFFER(){
     var temp = $_EVAL_BUFFER;
     $_EVAL_BUFFER = [];
     return temp.join("");
