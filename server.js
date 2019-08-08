@@ -11,8 +11,6 @@ var $_REMOTEADDR;
 var $_EVAL_BUFFER;
 
 const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
-    console.log(new Date().getMinutes() + ":" + new Date().getSeconds() + ":" + new Date().getMilliseconds());
-
     var $_STATUS = 200;
 
     $_REQUEST = _SYSTEMREQUEST.url.split('?')[0];
@@ -35,37 +33,36 @@ const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
         
     });
 
-    //Open dir index
-    if($_FS.lstatSync($_CONFIG.files.server_folder + "/" + $_REQUEST).isDirectory())
-        $_REQUEST += "/" + $_CONFIG.files.index_file;
+    //Validate request
+    if($_FS.existsSync($_REQUEST)){
+        //Open dir index
+        if($_FS.lstatSync($_CONFIG.files.server_folder + "/" + $_REQUEST).isDirectory())
+            $_REQUEST += "/" + $_CONFIG.files.index_file;
 
-    //Escape request
-    $_REQUEST = _ESCAPEREQUEST($_REQUEST);
+        //Escape request
+        $_REQUEST = _ESCAPEREQUEST($_REQUEST);
 
-    //whitelist check
-    var d_whitel = $_CONFIG.files.whitelist[$_PATH.dirname($_REQUEST)];
-    var f_whitel = $_CONFIG.files.whitelist[$_PATH.basename($_REQUEST)];
-    
-    if(d_whitel == "block" || f_whitel == "block"){
-        $_REQUEST = $_CONFIG.files.errors['deny'];
-        $_STATUS = 200;
+        //whitelist check
+        var d_whitel = $_CONFIG.files.whitelist[$_PATH.dirname($_REQUEST)];
+        var f_whitel = $_CONFIG.files.whitelist[$_PATH.basename($_REQUEST)];
+        
+        if(d_whitel == "block" || f_whitel == "block"){
+            $_REQUEST = $_CONFIG.files.errors['403'];
+            $_STATUS = 200;
+        }
+
+        if($_FS.existsSync($_REQUEST))
+            _THROW404();
     }
+    else _THROW404();
 
     //append server directory
     $_REQUEST = _ESCAPEREQUEST($_CONFIG.files.server_folder + "/" + $_REQUEST);
-
-    //Validate File
-    if(!$_FS.existsSync($_REQUEST)){
-        $_REQUEST = $_CONFIG.files.server_folder + "/" + $_CONFIG.files.errors['404'];
-        $_STATUS = 404;
-    }
 
     _SYSTEMREQUEST.on("end", function(){
         $_URLEXT = $_REQUEST.split('.')[1];
         _SYSTEMRESPONSE.writeHead($_STATUS, {'Content-Type': $_CONFIG.files.types[$_URLEXT] || $_CONFIG.files.types['txt']});
         _SYSTEMRESPONSE.end(_SYSTEMREADFILE($_REQUEST));
-
-        console.log(new Date().getMinutes() + ":" + new Date().getSeconds() + ":" + new Date().getMilliseconds());
     });
 });
 
@@ -76,6 +73,12 @@ $_SERVER.listen($_CONFIG.address.port, $_CONFIG.address.ip, () => {
     console.log("   Help us in GitHub: https://github.com/GumpFlash/jhp");
     console.log(" ");
 });
+
+function _THROW404()
+{
+    $_REQUEST = $_CONFIG.files.server_folder + "/" + $_CONFIG.files.errors['404'];
+    $_STATUS = 404;
+}
 
 function _ESCAPEREQUEST(str){
     var result = "";

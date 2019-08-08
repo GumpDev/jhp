@@ -13,9 +13,9 @@
 </head>
 <body>
     <jhp>
-        echo("Hello World!<br>");
+        echo("Hello World!");
         echo("<br>Request: " + $_REQUEST);
-        echo("This server is running at <pre>http://" + $_REQUESTURL + "</pre>");
+        echo("<br>This server is running at <pre>http://" + $_REQUESTURL + "</pre>");
     </jhp>
 </body>
 </html>

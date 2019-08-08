@@ -23,7 +23,7 @@
         },
         "errors":{
             "404": "404.html",
-            "deny": "denied.html"
+            "403": "403.html"
         },
         "whitelist":{
         }
