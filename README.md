@@ -85,6 +85,8 @@ Exemple:
 
     
 ### We are working on
+   * Cookie System
+   * Session System
    * More shortcuts
    * MySql Server
    * MySql Compatible
