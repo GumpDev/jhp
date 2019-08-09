@@ -81,15 +81,22 @@ Exemple:
    * **echo(string)** - print a string in the html result `aka echo from php´
    * **mysql_connect(database)** - to connect in a MySql Database
    * **mysql_query(sql)** - to Update or Insert uses
+   
       *Exemple:*
-         > mysql_query("SELECT * FROM users");
+      
+         mysql_query("SELECT * FROM users");
    * **mysql_query(sql,callback(error, rows))** - to Get data from Data Base
       *Exemple:*
-         >mysql_query("SELECT * FROM users",function(err,result){
-         >   result.forEach( (result) => {
-         >       echo(result.email + "<br>");
-         >   });
-         >});
+      
+         mysql_query("SELECT * FROM users",function(err,result){
+         
+            result.forEach( (result) => {
+         
+                echo(result.email + "<br>");
+                
+            });
+            
+         });
    
    
 --------------------
