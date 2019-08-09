@@ -10,6 +10,7 @@ var $_REQUEST;
 var $_REQUESTURL;
 var $_REMOTEADDR;
 var $_EVAL_BUFFER;
+var $_SESSIONS;
 
 var mysql;
 
@@ -241,4 +242,22 @@ function mysql_connect(database){
 function mysql_query(sql,callback){
     if(callback == undefined) mysql.query(sql);
     else mysql.query(sql, callback);
+}
+
+function session_start(){
+    const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const size = 64;
+    
+    var returnKey = "";
+
+    for(var i = 0; i < size; i++){
+        var rnd = parseInt(Math.random() * letters.length);
+        returnKey += letters[rnd];
+    }
+
+    //Needs insert key in cookie
+    //and create a array for all sessions
+    
+    $_SESSIONS.push(returnKey);
+    return returnKey;
 }
