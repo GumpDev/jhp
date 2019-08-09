@@ -85,7 +85,9 @@ Exemple:
    
       *Exemple:*
         `mysql_query("SELECT * FROM users");`
+        
    * **mysql_query(sql,callback(error, rows))** - to Get data from Data Base
+   
       *Exemple:*
       
         `mysql_query("SELECT * FROM users",function(err,result){
