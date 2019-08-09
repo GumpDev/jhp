@@ -10,7 +10,7 @@ var $_REQUEST;
 var $_REQUESTURL;
 var $_REMOTEADDR;
 var $_EVAL_BUFFER;
-var $_SESSIONS;
+var $_SESSIONS = [];
 
 var mysql;
 
