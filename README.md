@@ -24,6 +24,7 @@ To execute Node.JS commands, you need to make a file with .jhp extension , and u
 
 
 Exemple:
+
 `<jhp>
     echo($_FS.readdirSync('.')); //Read the server directory and print in the client screen.
 </jhp>`
@@ -83,20 +84,15 @@ Exemple:
    * **mysql_query(sql)** - to Update or Insert uses
    
       *Exemple:*
-      
-         mysql_query("SELECT * FROM users");
+        `mysql_query("SELECT * FROM users");`
    * **mysql_query(sql,callback(error, rows))** - to Get data from Data Base
       *Exemple:*
       
-         mysql_query("SELECT * FROM users",function(err,result){
-         
+        `mysql_query("SELECT * FROM users",function(err,result){
             result.forEach( (result) => {
-         
                 echo(result.email + "<br>");
-                
             });
-            
-         });
+         });`
    
    
 --------------------
