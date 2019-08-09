@@ -3,6 +3,11 @@
         "ip": "localhost",
         "port": "3000"
     },
+    "sql":{
+        "host": "localhost",
+        "user": "root",
+        "password": ""
+    },
     "files":{
         "server_folder": "public_html",
         "index_file": "index.jhp",
