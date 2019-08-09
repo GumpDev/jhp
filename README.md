@@ -88,9 +88,7 @@ Exemple:
         
    * **mysql_query(sql,callback(error, rows))** - to Get data from Data Base
    
-      *Exemple:*
-      
-        `mysql_query("SELECT * FROM users",function(err,result){
+      *Exemple:*`mysql_query("SELECT * FROM users",function(err,result){
             result.forEach( (result) => {
                 echo(result.email + "<br>");
             });
