@@ -77,7 +77,7 @@ $_SERVER.listen($_CONFIG.address.port, $_CONFIG.address.ip, () => {
 
 function _THROW404()
 {
-    $_REQUEST = $_CONFIG.files.server_folder + "/" + $_CONFIG.files.errors['404'];
+    $_REQUEST = $_CONFIG.files.errors['404'];
     $_STATUS = 404;
 }
 
