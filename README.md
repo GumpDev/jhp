@@ -24,6 +24,7 @@ To execute Node.JS commands, you need to make a file with .jhp extension , and u
 
 
 Exemple:
+
 `<jhp>
     echo($_FS.readdirSync('.')); //Read the server directory and print in the client screen.
 </jhp>`
@@ -54,6 +55,14 @@ Exemple:
   
   
 --------------------
+  
+  
+### Tags
+    <jhp>(nodejs commands)</jhp> - Executes Node.js commands inside this tag
+    <include>(path)</include> - Read and Print a File in the Script
+  
+  
+--------------------
  
     
 ### Variables
@@ -71,16 +80,28 @@ Exemple:
     
 ### Functions
    * **echo(string)** - print a string in the html result `aka echo from php´
+   * **mysql_connect(database)** - to connect in a MySql Database
+   * **mysql_query(sql)** - to Update or Insert uses
+   
+      *Exemple:*
+        `mysql_query("SELECT * FROM users");`
+        
+   * **mysql_query(sql,callback(error, rows))** - to Get data from Data Base
+   
+      *Exemple:*`mysql_query("SELECT * FROM users",function(err,result){
+            result.forEach( (result) => {
+                echo(result.email + "<br>");
+            });
+         });`
    
    
 --------------------
 
     
 ### We are working on
-   * Include Command
-   * MySql Server
-   * MySql Compatible
-   * More error pages
+   * Cookie System
+   * Session System
+   * More shortcuts
    * Visual Studio And Sublime Text Extension to Interpret .jhp file
     
     

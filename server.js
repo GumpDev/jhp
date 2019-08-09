@@ -2,6 +2,7 @@ const $_HTTP = require('http');
 const $_FS = require('fs');
 const $_PATH = require('path')
 const $_CONFIG = require('./config.json');
+const $_MYSQL = require('mysql');
 
 var $_POST;
 var $_GET;
@@ -9,6 +10,8 @@ var $_REQUEST;
 var $_REQUESTURL;
 var $_REMOTEADDR;
 var $_EVAL_BUFFER;
+
+var mysql;
 
 const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
     var $_STATUS = 200;
@@ -216,4 +219,26 @@ function $_GET_EVAL_BUFFER(){
     var temp = $_EVAL_BUFFER;
     $_EVAL_BUFFER = [];
     return temp.join("");
+}
+
+function mysql_connect(database){
+    try{
+        mysql = $_MYSQL.createConnection({
+            host: $_CONFIG['sql']['host'],
+            user: $_CONFIG['sql']['user'],
+            password: $_CONFIG['sql']['password'],
+            database: database
+        });
+
+        mysql.connect((err) => {
+            if (err) echo(err.sqlMessage);
+        });
+    }catch(e){
+        echo(e);
+    }
+}
+
+function mysql_query(sql,callback){
+    if(callback == undefined) mysql.query(sql);
+    else mysql.query(sql, callback);
 }
