@@ -9,7 +9,6 @@ This project is made to help making websites with node.js*
 ### How to Use 
 To make a JHP server you need [Node.JS](https://nodejs.org/en/)
 
-
 After you install Node.JS copy 
    * public_html/
    * server.js
@@ -32,6 +31,12 @@ Exemple:
 
 --------------------
 
+### Dependencies
+   * fs
+   * http
+   * path
+   * cookies (https://github.com/pillarjs/cookies)
+   * mysql (https://github.com/mysqljs/mysql)
 
 ### Configuration
    * To edit Configurations open the config.json
