@@ -31,13 +31,6 @@ Exemple:
 
 --------------------
 
-### Dependencies
-   * fs
-   * http
-   * path
-   * cookies (https://github.com/pillarjs/cookies)
-   * mysql (https://github.com/mysqljs/mysql)
-
 ### Configuration
    * To edit Configurations open the config.json
     
@@ -109,6 +102,17 @@ Exemple:
    * More shortcuts
    * Visual Studio And Sublime Text Extension to Interpret .jhp file
     
+  
+--------------------
+    
+    
+### Dependencies
+   * fs
+   * http
+   * path
+   * cookies (https://github.com/pillarjs/cookies)
+   * mysql (https://github.com/mysqljs/mysql)
+
     
 --------------------
 
