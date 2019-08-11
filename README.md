@@ -32,11 +32,11 @@ Exemple:
 --------------------
 
 ### Dependencies
-   * cookies `npm install cookies` (https://github.com/pillarjs/cookies)
    * fs
    * http
    * path
-   * mysql
+   * cookies (https://github.com/pillarjs/cookies)
+   * mysql (https://github.com/mysqljs/mysql)
 
 ### Configuration
    * To edit Configurations open the config.json
