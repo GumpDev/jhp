@@ -3,19 +3,25 @@ const $_FS = require('fs');
 const $_PATH = require('path')
 const $_CONFIG = require('./config.json');
 const $_MYSQL = require('mysql');
+const $_COOKIE = require('cookies');
+
 
 var $_POST;
 var $_GET;
 var $_REQUEST;
+var $_RESPONSE;
 var $_REQUESTURL;
 var $_REMOTEADDR;
 var $_EVAL_BUFFER;
 var $_SESSIONS = [];
+var $_COOKIES = undefined;
+var $_STATUS;
 
 var mysql;
 
 const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
-    var $_STATUS = 200;
+    $_STATUS = 200;
+    $_COOKIES = new $_COOKIE(_SYSTEMREQUEST, _SYSTEMRESPONSE, undefined)
 
     $_REQUEST = _SYSTEMREQUEST.url.split('?')[0];
     $_REQUESTURL =  $_CONFIG.address.port != 80 ? $_CONFIG.address.ip + ":" + $_CONFIG.address.port + $_REQUEST : $_CONFIG.address.ip + $_REQUEST;
@@ -63,11 +69,13 @@ const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
 
     //append server directory
     $_REQUEST = _ESCAPEREQUEST($_CONFIG.files.server_folder + "/" + $_REQUEST);
+    $_RESPONSE = _SYSTEMREADFILE($_REQUEST);
 
     _SYSTEMREQUEST.on("end", function(){
         $_URLEXT = $_REQUEST.split('.')[1];
+
         _SYSTEMRESPONSE.writeHead($_STATUS, {'Content-Type': $_CONFIG.files.types[$_URLEXT] || $_CONFIG.files.types['txt']});
-        _SYSTEMRESPONSE.end(_SYSTEMREADFILE($_REQUEST));
+        _SYSTEMRESPONSE.end($_RESPONSE);
     });
 });
 
@@ -214,6 +222,14 @@ function echo(str){
         $_EVAL_BUFFER = [];
 
     $_EVAL_BUFFER.push(str);
+}
+
+
+function setCookie(cname, cvalue) {
+    $_COOKIES.set(cname, cvalue, { signed: false });
+}
+function getCookie(cname){
+    return $_COOKIES.get(cname, { signed: false });
 }
 
 function $_GET_EVAL_BUFFER(){
