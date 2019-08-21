@@ -3,21 +3,46 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Hi <jhp>$_REMOTEADDR;</jhp> - Teste HTML</title>
+    <title>Exemple Page - JHP</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <style>
-        pre{
-            display: inline
-        }
-    </style>
+    <script src="assets/script.js"></script>
+    <link rel='stylesheet' type='text/css' media='screen' href='assets/style.css'>
+    <link rel="shortcut icon" href="assets/icon.png" />
+    <link rel="icon" href="assets/icon.png" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 </head>
 <body>
-    <jhp>
-        echo("Hello World!");
-        echo("<br>Request: " + $_REQUEST);
-        echo("<br>This server is running at <pre>http://" + $_REQUESTURL + "</pre>");
-        echo("<br><br>Included code:");
-         <include>public_html/test.jhp</include>
-    </jhp>
+    <img class="icon" src="assets/icon_white.png">
+    <div class="panel">
+        <div class="center title">Hello World</div>
+        <div class="center subtitle">JHP Server is Running!</div>
+        <hr>
+        <div class="center"><a href="https://github.com/GumpFlash/jhp/blob/master/README.md">Documentation</a></div>
+        <br>
+        <div class="center">
+            <div class="midtitle">Thanks S2</div>
+            We love you
+        </div>
+        <br>
+        <div class="centered">
+            <fieldset>
+                <legend>Social Medias</legend>
+                <div class="tab"><a href="https://github.com/GumpFlash/jhp">Github</a></div>
+                <div class="tab"><a href="https://bitcodestudios.com/">BitCodeStudios</a></div>
+                <div class="tab"><a href="https://twitter.com/BitCodeStudios">BitCodeStudios Twitter</a></div>
+                <div class="tab"><a href="https://www.youtube.com/gumpflash">GumpFlash's Channel</a></div>
+                <div class="tab"><a href="https://www.youtube.com/user/textgamerbr">Hetrodo's Channel</a></div>
+            </fieldset>
+        </div>
+        <br><br>
+        <hr>
+        <br><br>
+        <div style="font-size: 14px;" class="center">
+            JHP Created by Gustavo M. Paes(GumpFlash) and Eduardo Leite(Hetrodo) from <a href="https://bitcodestudios.com/">BitCodeStudios</a>, JHP uses NodeJs and <a href="https://github.com/GumpFlash/jhp#dependencies">somes dependencies</a> <br> <a href="https://github.com/GumpFlash/jhp/blob/master/LICENSE">MIT License</a> Copyright (c) 2019 Gustavo Maia Paes and Eduardo Leite
+        </div>
+        <br>
+        <div style="float: right"><jhp>echo("Client IP: "+$_REMOTEADDR);</jhp></div>
+        <jhp>echo("Request URL: "+$_REQUESTURL);</jhp>
+    </div>
 </body>
 </html>

@@ -27,8 +27,8 @@
             "json": "application/json"
         },
         "errors":{
-            "404": "404.html",
-            "403": "403.html"
+            "404": "404.jhp",
+            "403": "403.jhp"
         },
         "whitelist":{
         }

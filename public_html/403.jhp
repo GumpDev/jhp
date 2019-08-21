@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>403 - Forbidden</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script src="assets/script.js"></script>
+    <link rel='stylesheet' type='text/css' media='screen' href='assets/style.css'>
+    <link rel="shortcut icon" href="assets/icon.png" />
+    <link rel="icon" href="assets/icon.png" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="panel-title">
+        <img class="icon-title" src="assets/icon_white.png"> <b style="filter: drop-shadow(5px 5px 10px #353535) brightness(100%);">ERROR 403 - Forbidden</b>
+        <div style="color: white" class="center subtitle">
+            <div style="float: right"><jhp>echo("Client IP: "+$_REMOTEADDR);</jhp></div>
+            <div style="float: left"><jhp>echo("Request URL: "+$_REQUESTURL);</jhp></div>
+        </div>
+    </div>
+</body>
+</html>
