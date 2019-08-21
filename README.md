@@ -69,8 +69,9 @@ Exemple:
    * **$_CONFIG** - It's the config file of the server
    * **$_GET** - Variable to get GET values
    * **$_POST** - Variable to get POST values
-   * **$_URL** - Get the URL after '/'
-   * **$_FULLURL** - Get the full URL
+   * **$_REQUEST** - Get the URL after '/'
+   * **$_REQUESTURL** - Get the full URL
+   * **$_REMOTEADDR** - Get the Remote Address
    
     
 --------------------
@@ -78,13 +79,15 @@ Exemple:
     
 ### Functions
    * **echo(string)** - print a string in the html result `aka echo from php´
-   * **mysql_connect(database)** - to connect in a MySql Database
-   * **mysql_query(sql)** - to Update or Insert uses
+   * **Cookie.set(key,value)** - Set a key in cookie
+   * **Cookie.get(key)** - Gets a cookie value
+   * **MySql.connect(database)** - to connect in a MySql Database
+   * **MySql.query(sql)** - to Update or Insert uses
    
       *Exemple:*
         `mysql_query("SELECT * FROM users");`
         
-   * **mysql_query(sql,callback(error, rows))** - to Get data from Data Base
+   * **MySql.query(sql,callback(error, rows))** - to Get data from Data Base
    
       *Exemple:*`mysql_query("SELECT * FROM users",function(err,result){
             result.forEach( (result) => {
@@ -97,8 +100,6 @@ Exemple:
 
     
 ### We are working on
-   * Cookie System
-   * Session System
    * More shortcuts
    * Visual Studio And Sublime Text Extension to Interpret .jhp file
     

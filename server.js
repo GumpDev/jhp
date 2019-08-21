@@ -13,7 +13,6 @@ var $_RESPONSE;
 var $_REQUESTURL;
 var $_REMOTEADDR;
 var $_EVAL_BUFFER;
-var $_SESSIONS = [];
 var $_COOKIES = undefined;
 var $_STATUS;
 
@@ -21,7 +20,7 @@ var mysql;
 
 const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
     $_STATUS = 200;
-    $_COOKIES = new $_COOKIE(_SYSTEMREQUEST, _SYSTEMRESPONSE, undefined)
+    $_COOKIES = new $_COOKIE(_SYSTEMREQUEST, _SYSTEMRESPONSE, undefined);
 
     $_REQUEST = _SYSTEMREQUEST.url.split('?')[0];
     $_REQUESTURL =  $_CONFIG.address.port != 80 ? $_CONFIG.address.ip + ":" + $_CONFIG.address.port + $_REQUEST : $_CONFIG.address.ip + $_REQUEST;
@@ -153,31 +152,6 @@ function _SYSTEMRUNJHP($_SYSTEMFILE){
     return Buffer.from($_FILECONTENT, 'utf8');
 }
 
-function $_HASH(txt,seed){
-    if(seed == undefined)
-        seed = $_CONFIG.hashCode;
-
-    var _SYSTEMHASHRETURN = 0;
-    for(var i = 0; i < txt.length; i++){
-        var _SYSTEMHASHVALUE = Math.round(Math.sqrt(txt.charCodeAt(i) + i * Math.cos(i * seed)) * 1000000000000 * Math.round(seed * Math.PI));
-        _SYSTEMHASHRETURN += _SYSTEMHASHVALUE;
-    }
-    _SYSTEMHASHRETURN = _SYSTEMHASHRETURN.toString(16);
-    var max = _SYSTEMHASHRETURN.length;
-    while(max % 4 != 0){
-        max++;
-    }
-    var _SYSTEMHASHRETURN2 = "";
-    for(var i = 0; i < max; i++){
-        if(i % 4 == 0 && i != 0)
-            _SYSTEMHASHRETURN2 += "-";
-        if(_SYSTEMHASHRETURN[i] != undefined)
-            _SYSTEMHASHRETURN2 += _SYSTEMHASHRETURN[i];
-        else
-            _SYSTEMHASHRETURN2 += "0";
-    }
-    return _SYSTEMHASHRETURN2;
-}
 
 function $_GETBETWEEN(str, tag0, tag1){
     var Results = [];
@@ -224,56 +198,68 @@ function echo(str){
     $_EVAL_BUFFER.push(str);
 }
 
-
-function setCookie(cname, cvalue) {
-    $_COOKIES.set(cname, cvalue, { signed: false });
-}
-function getCookie(cname){
-    return $_COOKIES.get(cname, { signed: false });
-}
-
 function $_GET_EVAL_BUFFER(){
     var temp = $_EVAL_BUFFER;
     $_EVAL_BUFFER = [];
     return temp.join("");
 }
 
-function mysql_connect(database){
-    try{
-        mysql = $_MYSQL.createConnection({
-            host: $_CONFIG['sql']['host'],
-            user: $_CONFIG['sql']['user'],
-            password: $_CONFIG['sql']['password'],
-            database: database
-        });
+const Hash = {
+    generate : function (txt,seed){
+        if(seed == undefined)
+            seed = $_CONFIG.hashCode;
 
-        mysql.connect((err) => {
-            if (err) echo(err.sqlMessage);
-        });
-    }catch(e){
-        echo(e);
+        var _SYSTEMHASHRETURN = 0;
+        for(var i = 0; i < txt.length; i++){
+            var _SYSTEMHASHVALUE = Math.round(Math.sqrt(txt.charCodeAt(i) + i * Math.cos(i * seed)) * 1000000000000 * Math.round(seed * Math.PI));
+            _SYSTEMHASHRETURN += _SYSTEMHASHVALUE;
+        }
+        _SYSTEMHASHRETURN = _SYSTEMHASHRETURN.toString(16);
+        var max = _SYSTEMHASHRETURN.length;
+        while(max % 4 != 0){
+            max++;
+        }
+        var _SYSTEMHASHRETURN2 = "";
+        for(var i = 0; i < max; i++){
+            if(i % 4 == 0 && i != 0)
+                _SYSTEMHASHRETURN2 += "-";
+            if(_SYSTEMHASHRETURN[i] != undefined)
+                _SYSTEMHASHRETURN2 += _SYSTEMHASHRETURN[i];
+            else
+                _SYSTEMHASHRETURN2 += "0";
+        }
+        return _SYSTEMHASHRETURN2;
     }
 }
 
-function mysql_query(sql,callback){
-    if(callback == undefined) mysql.query(sql);
-    else mysql.query(sql, callback);
+const Cookie = {
+    set : function (cookie_name, cookie_value){
+        $_COOKIES.set(cookie_name, cookie_value, { signed: false });
+    },
+    get : function (cookie_name){
+        return $_COOKIES.get(cookie_name, { signed: false });
+    }
 }
 
-function session_start(){
-    const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    const size = 64;
+const MySql = {
+    connect : function(database_name){
+        try{
+            mysql = $_MYSQL.createConnection({
+                host: $_CONFIG['sql']['host'],
+                user: $_CONFIG['sql']['user'],
+                password: $_CONFIG['sql']['password'],
+                database: database_name
+            });
     
-    var returnKey = "";
-
-    for(var i = 0; i < size; i++){
-        var rnd = parseInt(Math.random() * letters.length);
-        returnKey += letters[rnd];
+            mysql.connect((err) => {
+                if (err) echo(err.sqlMessage);
+            });
+        }catch(e){
+            echo(e);
+        }
+    },
+    query : function(sql,callback){
+        if(callback == undefined) mysql.query(sql);
+        else mysql.query(sql, callback);
     }
-
-    //Needs insert key in cookie
-    //and create a array for all sessions
-    
-    $_SESSIONS.push(returnKey);
-    return returnKey;
 }
