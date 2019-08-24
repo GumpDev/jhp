@@ -12,7 +12,7 @@
         "server_folder": "public_html",
         "index_file": "index.jhp",
         "without_extension": [
-            "jhp"
+            ".jhp"
         ],
         "types" : {
             "txt": "text/plain",

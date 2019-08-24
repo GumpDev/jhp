@@ -18,6 +18,8 @@ body{
     background-size: cover;
 
     font-size: 18px;
+
+    min-height: 100%;
 }
 
 .centered{

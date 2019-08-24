@@ -19,6 +19,7 @@ var $_STATUS;
 var mysql;
 
 const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
+    $_EVAL_BUFFER = "";
     $_STATUS = 200;
     $_COOKIES = new $_COOKIE(_SYSTEMREQUEST, _SYSTEMRESPONSE, undefined);
 
