@@ -5,7 +5,6 @@ const $_CONFIG = require('./config.json');
 const $_MYSQL = require('mysql');
 const $_COOKIE = require('cookies');
 
-
 var $_POST;
 var $_GET;
 var $_REQUEST;
@@ -19,7 +18,7 @@ var $_STATUS;
 var mysql;
 
 const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
-    $_EVAL_BUFFER = "";
+    $_EVAL_BUFFER = [];
     $_STATUS = 200;
     $_COOKIES = new $_COOKIE(_SYSTEMREQUEST, _SYSTEMRESPONSE, undefined);
 
@@ -42,6 +41,11 @@ const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
             $_POST[$_POSTString.split('&')[i].split('=')[0]] = $_POSTString.split('&')[i].split('=')[1];
         
     });
+
+    if($_CONFIG.files.without_extension != "" && $_REQUEST != "/"){
+        if(!$_REQUEST.includes("."))
+            $_REQUEST += $_CONFIG.files.without_extension;
+    }
 
     //Validate request
     if($_FS.existsSync($_CONFIG.files.server_folder + "/" + $_REQUEST)){

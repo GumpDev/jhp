@@ -11,9 +11,7 @@
     "files":{
         "server_folder": "public_html",
         "index_file": "index.jhp",
-        "without_extension": [
-            ".jhp"
-        ],
+        "without_extension": ".jhp",
         "types" : {
             "txt": "text/plain",
             "htm": "text/html",
