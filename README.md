@@ -57,8 +57,6 @@ Exemple:
   
 ### Tags
     <jhp>(nodejs commands)</jhp> - Executes Node.js commands inside this tag
-    <include>(path)</include> - Read and Print a File in the Script
-  
   
 --------------------
  
@@ -79,6 +77,7 @@ Exemple:
     
 ### Functions
    * **echo(string)** - print a string in the html result `aka echo from php´
+   * **include(path)** - Read and Print a File in the Script
    * **Cookie.set(key,value)** - Set a key in cookie
    * **Cookie.get(key)** - Gets a cookie value
    * **MySql.connect(database)** - to connect in a MySql Database
