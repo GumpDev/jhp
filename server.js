@@ -124,28 +124,14 @@ function _SYSTEMREADFILE(file){
     return $_CONTENT;
 }
 
-function _SYSTEMRUNJHP($_SYSTEMFILE){
+function _SYSTEMRUNJHP($_SYSTEMFILE)
+{
     var $_FILECONTENT = $_SYSTEMFILE;
 
     var $_JHPCODE = $_GETBETWEEN($_FILECONTENT, "<jhp>", "</jhp>");
 
-    for(var $_SYSTEMX = 0; $_SYSTEMX < $_JHPCODE.length; $_SYSTEMX++){
-        //Get all include tags
-        var $_JHPINCLUDE = $_GETBETWEEN($_JHPCODE[$_SYSTEMX], "<include>", "</include>");
-
-        //Loop through all tags
-        for(var $_INCLUDE_INDEX = 0; $_INCLUDE_INDEX < $_JHPINCLUDE.length; $_INCLUDE_INDEX++){
-            //Read tag's target file and get its jhp code
-            var tempcode = $_GETBETWEEN($_FS.readFileSync($_JHPINCLUDE[$_INCLUDE_INDEX]).toString(), "<jhp>", "</jhp>");
-
-            for(var tempcodeI = 0; tempcodeI < tempcode.length; tempcodeI++){
-                //Replace the previous loaded code into the original requested code
-                var updatedCode = $_JHPCODE[$_SYSTEMX].replace("<include>" + $_JHPINCLUDE[$_INCLUDE_INDEX] + "</include>", tempcode[tempcodeI]);
-                $_FILECONTENT = $_FILECONTENT.replace($_JHPCODE[$_SYSTEMX], updatedCode);
-                $_JHPCODE[$_SYSTEMX] = updatedCode;
-            }
-        }
-
+    for(var $_SYSTEMX = 0; $_SYSTEMX < $_JHPCODE.length; $_SYSTEMX++)
+    {
         //"Compile" code
         try{ echo(eval($_JHPCODE[$_SYSTEMX])); } catch(e){ echo(e.toString()); }
         $_FILECONTENT = $_FILECONTENT.toString().replace("<jhp>" + $_JHPCODE[$_SYSTEMX] + "</jhp>", $_GET_EVAL_BUFFER());
@@ -157,6 +143,32 @@ function _SYSTEMRUNJHP($_SYSTEMFILE){
     return Buffer.from($_FILECONTENT, 'utf8');
 }
 
+function _SYSTEMPROCESSTAGS($_SYSTEMFILE)
+{
+    var $_FILECONTENT = $_SYSTEMFILE;
+
+    $_FILECONTENT = _SYSTEMPROCESSTAG($_FILECONTENT, "example", function(str) 
+    { 
+        return `example(${str});`; 
+    });
+
+    return $_FILECONTENT;
+}
+
+function _SYSTEMPROCESSTAG($_SYSTEMFILE, tag, event)
+{
+    var $_FILECONTENT = $_SYSTEMFILE;
+
+    //Get all matching tags
+    var $_JHPTAG = $_GETBETWEEN($_FILECONTENT, `<${tag}>`, `</${tag}>`);
+
+    for(var $_TAG_INDEX = 0; $_TAG_INDEX < $_JHPTAG.length; $_TAG_INDEX++)
+    {
+        $_FILECONTENT = $_FILECONTENT.replace(`<${tag}>` + $_JHPTAG[$_TAG_INDEX] + `</${tag}>`, event.call(null, $_JHPTAG[$_TAG_INDEX]));
+    }
+
+    return $_FILECONTENT;
+}
 
 function $_GETBETWEEN(str, tag0, tag1){
     var Results = [];
@@ -201,6 +213,14 @@ function echo(str){
         $_EVAL_BUFFER = [];
 
     $_EVAL_BUFFER.push(str);
+}
+
+function include(str)
+{
+    var tempcode = $_GETBETWEEN($_FS.readFileSync(str).toString(), "<jhp>", "</jhp>");
+
+    for(var tempcodeI = 0; tempcodeI < tempcode.length; tempcodeI++)
+        eval(tempcode[tempcodeI]);
 }
 
 function $_GET_EVAL_BUFFER(){
