@@ -217,10 +217,10 @@ function echo(str){
 
 function include(str)
 {
-    var tempcode = $_GETBETWEEN($_FS.readFileSync(str).toString(), "<jhp>", "</jhp>");
+    $_REQUEST2 = _ESCAPEREQUEST($_CONFIG.files.server_folder + "/" + str);
+    $_RESPONSE2 = _SYSTEMREADFILE($_REQUEST2);
 
-    for(var tempcodeI = 0; tempcodeI < tempcode.length; tempcodeI++)
-        eval(tempcode[tempcodeI]);
+    echo($_RESPONSE2);
 }
 
 function $_GET_EVAL_BUFFER(){
