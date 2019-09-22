@@ -156,6 +156,15 @@ function _SYSTEMRUNJHP($_SYSTEMFILE)
 {
     var $_FILECONTENT = $_SYSTEMFILE;
 
+    var $_JHPCODE = $_GETBETWEEN($_FILECONTENT, "<jhp>", "</jhp>");
+
+    for(var $_SYSTEMX = 0; $_SYSTEMX < $_JHPCODE.length; $_SYSTEMX++)
+    {
+        //"Compile" code
+        try{ echo(eval($_JHPCODE[$_SYSTEMX])); } catch(e){ echo(e.toString()); }
+        $_FILECONTENT = $_FILECONTENT.toString().replace("<jhp>" + $_JHPCODE[$_SYSTEMX] + "</jhp>", $_GET_EVAL_BUFFER());
+    }
+
     for(var x = 0; x < $_CUSTOMTAGS.length; x++){
         var $_CODEARGS = $_GETBETWEEN($_FILECONTENT, "<"+$_CUSTOMTAGS[x], ">");
         for(var y = 0; y < $_CODEARGS.length; y++){
@@ -174,21 +183,11 @@ function _SYSTEMRUNJHP($_SYSTEMFILE)
                     $_FILEREADED = replaceAll($_FILEREADED.toString(),'{'+args[i]+'}',args[i+1]);
                     i+=2;
                 }
-
-                $_FILECONTENT = $_FILECONTENT.toString().replace("<"+$_CUSTOMTAGS[x]+$_CODEARGS[y]+">" + $_CUSTOMCODE[$_SYSTEMX] + "</"+$_CUSTOMTAGS[x]+">", $_FILEREADED);
+                $_FILECONTENT = $_FILECONTENT.toString().replace("<"+$_CUSTOMTAGS[x]+$_CODEARGS[y]+">" + $_CUSTOMCODE[$_SYSTEMX] + "</"+$_CUSTOMTAGS[x]+">",_SYSTEMRUNJHP($_FILEREADED));
             }
         }
     }
-
-    var $_JHPCODE = $_GETBETWEEN($_FILECONTENT, "<jhp>", "</jhp>");
-
-    for(var $_SYSTEMX = 0; $_SYSTEMX < $_JHPCODE.length; $_SYSTEMX++)
-    {
-        //"Compile" code
-        try{ echo(eval($_JHPCODE[$_SYSTEMX])); } catch(e){ echo(e.toString()); }
-        $_FILECONTENT = $_FILECONTENT.toString().replace("<jhp>" + $_JHPCODE[$_SYSTEMX] + "</jhp>", $_GET_EVAL_BUFFER());
-    }
-
+    
     if($_FILECONTENT.includes("<jhp>") || $_FILECONTENT.includes("</jhp>"))
         console.log("[Warning] The result still has jhp tags inside it.");
 
