@@ -66,14 +66,13 @@ Exemple:
 ### Custom HTML Tags
     To create a Custom HTML tag you need make a JHP file in 'custom_tags' folder 
     and in the file you define how it is the tag in HTML.
-    Exemple:
+   **Exemple:**
        'exemple_tag.jhp':
-       `<h1>{title}</h1>
-          <p>{...}</p>`
-    You can call this tag with:
-       `<exemple_tag title='test'>this tag is working :D</exemple_tag>`
+        `<h1>{title}</h1><p>{...}</p>`
+   **You can call this tag with:**
+        `<exemple_tag title='test'>this tag is working :D</exemple_tag>`
 
-     *{...} it is a text between the tag
+   {...} it is a text between the tag
 --------------------
 
     
