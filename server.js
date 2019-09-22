@@ -173,15 +173,17 @@ function _SYSTEMRUNJHP($_SYSTEMFILE)
             {
                 var $_FILEREADED = $_FS.readFileSync('custom_tags/'+$_CUSTOMTAGS[x]+".jhp");
                 $_FILEREADED = replaceAll($_FILEREADED.toString(),'{...}',$_CUSTOMCODE[$_SYSTEMX]);
-
-                var args2 = $_CODEARGS[y].split(' ').join('');
-                var args  = args2.split('=');
-                var i = 0;
-                while(i < args.length){
-                    args[i+1] = replaceAll(args[i+1],'"','');
-                    args[i+1] = replaceAll(args[i+1],"'",'');
-                    $_FILEREADED = replaceAll($_FILEREADED.toString(),'{'+args[i]+'}',args[i+1]);
-                    i+=2;
+                
+                if($_CODEARGS[y] != ""){
+                    var args2 = $_CODEARGS[y].split(' ').join('');
+                    var args  = args2.split('=');
+                    var i = 0;
+                    while(i < args.length){
+                        args[i+1] = replaceAll(args[i+1],'"','');
+                        args[i+1] = replaceAll(args[i+1],"'",'');
+                        $_FILEREADED = replaceAll($_FILEREADED.toString(),'{'+args[i]+'}',args[i+1]);
+                        i+=2;
+                    }
                 }
                 $_FILECONTENT = $_FILECONTENT.toString().replace("<"+$_CUSTOMTAGS[x]+$_CODEARGS[y]+">" + $_CUSTOMCODE[$_SYSTEMX] + "</"+$_CUSTOMTAGS[x]+">",_SYSTEMRUNJHP($_FILEREADED));
             }
