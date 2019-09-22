@@ -87,6 +87,7 @@ Exemple:
    * **$_CONFIG** - It's the config file of the server
    * **$_GET** - Variable to get GET values
    * **$_POST** - Variable to get POST values
+   * **$_FILES** - Variable to get Uploaded Files
    * **$_REQUEST** - Get the URL after '/'
    * **$_REQUESTURL** - Get the full URL
    * **$_REMOTEADDR** - Get the Remote Address
@@ -120,7 +121,6 @@ Exemple:
 
     
 ### We are working on
-   * Files upload
    * JHP UI Server
    * JHP Server Installer
    * WebSocket

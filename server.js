@@ -1,13 +1,15 @@
-const $_HTTP    = require('http');
-const $_FS      = require('fs');
-const $_PATH    = require('path')
-const $_CONFIG  = require('./config.json');
-const $_MYSQL   = require('mysql');
-const $_COOKIE  = require('cookies');
-const md5       = require('md5');
+const $_HTTP        = require('http');
+const $_FS          = require('fs');
+const $_PATH        = require('path')
+const $_CONFIG      = require('./config.json');
+const $_MYSQL       = require('mysql');
+const $_COOKIE      = require('cookies');
+const md5           = require('md5');
+const $_FORMIDABLE  = require('formidable');
 
 var $_POST;
 var $_GET;
+var $_FILES;
 var $_REQUEST;
 var $_RESPONSE;
 var $_REQUESTURL;
@@ -22,8 +24,11 @@ var mysql;
 const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
     $_EVAL_BUFFER = [];
     $_STATUS = 200;
+
+    //COOKIES
     $_COOKIES = new $_COOKIE(_SYSTEMREQUEST, _SYSTEMRESPONSE, undefined);
     
+    //CUSTOM TAGS
     $_CUSTOMTAGS = [];
     const $_FILES_CUSTOMTAGS = $_FS.readdirSync("custom_tags/");
     for(var ct = 0; ct < $_FILES_CUSTOMTAGS.length; ct++){
@@ -31,16 +36,19 @@ const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
             $_CUSTOMTAGS.push($_FILES_CUSTOMTAGS[ct].replace('.jhp',''));
     }
 
+    //URL
     $_REQUEST = _SYSTEMREQUEST.url.split('?')[0];
     $_REQUESTURL =  $_CONFIG.address.port != 80 ? $_CONFIG.address.ip + ":" + $_CONFIG.address.port + $_REQUEST : $_CONFIG.address.ip + $_REQUEST;
     $_REMOTEADDR = _SYSTEMREQUEST.connection.remoteAddress;
 
+    //Catch GET
     $_GET = {};
     if(_SYSTEMREQUEST.url.includes('?')){
         for(var i = 0; i < _SYSTEMREQUEST.url.split('?')[1].split("&").length; i++)
             $_GET[_SYSTEMREQUEST.url.split('?')[1].split('=')[0]] = _SYSTEMREQUEST.url.split('?')[1].split('=')[1]; 
     }
     
+    //Catch POST
     var $_POSTString = "";
     _SYSTEMREQUEST.on("data", function (chunk) {
         $_POSTString += chunk;
@@ -51,6 +59,16 @@ const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
         
     });
 
+    //Catch Files
+    $_FILES = [];
+    const $_FORM = new $_FORMIDABLE.IncomingForm();
+    $_FORM.parse(_SYSTEMREQUEST, function (err, fields, files) {
+        var $_fs = Object.keys(files);
+        for(var i = 0; i < $_fs.length;i++)
+            $_FILES[$_fs[i]] = files[$_fs[i]];
+    });
+
+    //Removes URL extension 
     if($_CONFIG.files.without_extension != "" && $_REQUEST != "/"){
         if(!$_REQUEST.includes("."))
             $_REQUEST += $_CONFIG.files.without_extension;
