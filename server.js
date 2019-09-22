@@ -163,13 +163,15 @@ function _SYSTEMRUNJHP($_SYSTEMFILE)
             for(var $_SYSTEMX = 0; $_SYSTEMX < $_CUSTOMCODE.length; $_SYSTEMX++)
             {
                 var $_FILEREADED = $_FS.readFileSync('custom_tags/'+$_CUSTOMTAGS[x]+".jhp");
-                $_FILEREADED = $_FILEREADED.toString().replace('{...}',$_CUSTOMCODE[$_SYSTEMX]);
+                $_FILEREADED = replaceAll($_FILEREADED.toString(),'{...}',$_CUSTOMCODE[$_SYSTEMX]);
 
                 var args2 = $_CODEARGS[y].split(' ').join('');
                 var args  = args2.split('=');
                 var i = 0;
                 while(i < args.length){
-                    $_FILEREADED = $_FILEREADED.toString().replace('{'+args[i]+'}',args[i+1].replace('"',"").replace('"',"").replace("'","").replace("'",""));
+                    args[i+1] = replaceAll(args[i+1],'"','');
+                    args[i+1] = replaceAll(args[i+1],"'",'');
+                    $_FILEREADED = replaceAll($_FILEREADED.toString(),'{'+args[i]+'}',args[i+1]);
                     i+=2;
                 }
 
@@ -337,4 +339,11 @@ const MySql = {
         if(callback == undefined) mysql.query(sql);
         else mysql.query(sql, callback);
     }
+}
+
+function replaceAll(string,key,value){
+    const l = string.split(key).length;
+    for(var i = 0; i < l; i++)
+        string = string.replace(key,value);
+    return string;
 }
