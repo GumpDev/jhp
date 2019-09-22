@@ -1,9 +1,10 @@
-const $_HTTP = require('http');
-const $_FS = require('fs');
-const $_PATH = require('path')
-const $_CONFIG = require('./config.json');
-const $_MYSQL = require('mysql');
-const $_COOKIE = require('cookies');
+const $_HTTP    = require('http');
+const $_FS      = require('fs');
+const $_PATH    = require('path')
+const $_CONFIG  = require('./config.json');
+const $_MYSQL   = require('mysql');
+const $_COOKIE  = require('cookies');
+const md5       = require('md5');
 
 var $_POST;
 var $_GET;
@@ -14,6 +15,7 @@ var $_REMOTEADDR;
 var $_EVAL_BUFFER;
 var $_COOKIES = undefined;
 var $_STATUS;
+var $_CUSTOMTAGS;
 
 var mysql;
 
@@ -21,6 +23,13 @@ const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
     $_EVAL_BUFFER = [];
     $_STATUS = 200;
     $_COOKIES = new $_COOKIE(_SYSTEMREQUEST, _SYSTEMRESPONSE, undefined);
+    
+    $_CUSTOMTAGS = [];
+    const $_FILES_CUSTOMTAGS = $_FS.readdirSync("custom_tags/");
+    for(var ct = 0; ct < $_FILES_CUSTOMTAGS.length; ct++){
+        if($_FILES_CUSTOMTAGS[ct].includes(".jhp"))
+            $_CUSTOMTAGS.push($_FILES_CUSTOMTAGS[ct].replace('.jhp',''));
+    }
 
     $_REQUEST = _SYSTEMREQUEST.url.split('?')[0];
     $_REQUESTURL =  $_CONFIG.address.port != 80 ? $_CONFIG.address.ip + ":" + $_CONFIG.address.port + $_REQUEST : $_CONFIG.address.ip + $_REQUEST;
@@ -113,6 +122,7 @@ function _SYSTEMREADFILE(file){
     var $_CONTENT = "";
     try{
         const ext = file.split('.')[1];
+
         if(ext == "jhp")
             $_CONTENT = _SYSTEMRUNJHP($_FS.readFileSync(file).toString());
         else
@@ -127,6 +137,28 @@ function _SYSTEMREADFILE(file){
 function _SYSTEMRUNJHP($_SYSTEMFILE)
 {
     var $_FILECONTENT = $_SYSTEMFILE;
+
+    for(var x = 0; x < $_CUSTOMTAGS.length; x++){
+        var $_CODEARGS = $_GETBETWEEN($_FILECONTENT, "<"+$_CUSTOMTAGS[x], ">");
+        for(var y = 0; y < $_CODEARGS.length; y++){
+            var $_CUSTOMCODE = $_GETBETWEEN($_FILECONTENT, "<"+$_CUSTOMTAGS[x]+$_CODEARGS[y]+">", "</"+$_CUSTOMTAGS[x]+">");
+            for(var $_SYSTEMX = 0; $_SYSTEMX < $_CUSTOMCODE.length; $_SYSTEMX++)
+            {
+                var $_FILEREADED = $_FS.readFileSync('custom_tags/'+$_CUSTOMTAGS[x]+".jhp");
+                $_FILEREADED = $_FILEREADED.toString().replace('{...}',$_CUSTOMCODE[$_SYSTEMX]);
+
+                var args2 = $_CODEARGS[y].split(' ').join('');
+                var args  = args2.split('=');
+                var i = 0;
+                while(i < args.length){
+                    $_FILEREADED = $_FILEREADED.toString().replace('{'+args[i]+'}',args[i+1].replace('"',"").replace('"',"").replace("'","").replace("'",""));
+                    i+=2;
+                }
+
+                $_FILECONTENT = $_FILECONTENT.toString().replace("<"+$_CUSTOMTAGS[x]+$_CODEARGS[y]+">" + $_CUSTOMCODE[$_SYSTEMX] + "</"+$_CUSTOMTAGS[x]+">", $_FILEREADED);
+            }
+        }
+    }
 
     var $_JHPCODE = $_GETBETWEEN($_FILECONTENT, "<jhp>", "</jhp>");
 

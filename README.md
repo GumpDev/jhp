@@ -10,6 +10,8 @@ This project is made to help making websites with node.js*
 To make a JHP server you need [Node.JS](https://nodejs.org/en/)
 
 After you install Node.JS copy 
+   * custom_tags/
+   * node_modules/
    * public_html/
    * server.js
    * config.json
@@ -49,7 +51,7 @@ Exemple:
    
     
 #### Hash Code
-   * Define a Hash Code to your server, when you use $_HASH(string)
+   * Define a Hash Code to your server, when you use Hash.generate(string)
   
   
 --------------------
@@ -60,6 +62,24 @@ Exemple:
   
 --------------------
  
+
+### Custom HTML Tags
+    To create a Custom HTML tag you need make a JHP file in 'custom_tags' folder and in the file you define how it is the tag in HTML.
+    Exemple:
+      'exemple_tag.jhp':
+         `
+            <h1>{title}</h1>
+            <p>{...}</p>
+         `
+    You can call this tag with:
+         `
+            <exemple_tag title='test'>this tag is working :D</exemple_tag>
+         `
+
+   
+    *{...} it is a text between the tag
+--------------------
+
     
 ### Variables
    * **$_FS** - It's the fs from node.js
@@ -78,6 +98,7 @@ Exemple:
 ### Functions
    * **echo(string)** - print a string in the html result `aka echo from php´
    * **include(path)** - Read and Print a File in the Script
+   * **Hash.generate(string)** - Convert a string into a hash
    * **Cookie.set(key,value)** - Set a key in cookie
    * **Cookie.get(key)** - Gets a cookie value
    * **MySql.connect(database)** - to connect in a MySql Database
@@ -99,6 +120,10 @@ Exemple:
 
     
 ### We are working on
+   * Files upload
+   * JHP UI Server
+   * JHP Server Installer
+   * WebSocket
    * More shortcuts
    * Visual Studio And Sublime Text Extension to Interpret .jhp file
     
