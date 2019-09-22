@@ -1,6 +1,6 @@
 const $_HTTP        = require('http');
 const $_FS          = require('fs');
-const $_PATH        = require('path')
+const $_PATH        = require('path');
 const $_CONFIG      = require('./config.json');
 const $_MYSQL       = require('mysql');
 const $_COOKIE      = require('cookies');
