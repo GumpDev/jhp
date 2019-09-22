@@ -69,13 +69,9 @@ Exemple:
     
    **Exemple:**
    
-       'exemple_tag.jhp':
-       
-        `<h1>{title}</h1><p>{...}</p>`
+       'exemple_tag.jhp': <h1>{title}</h1><p>{...}</p>
         
-   **You can call this tag with:**
-   
-        `<exemple_tag title='test'>this tag is working :D</exemple_tag>`
+   **You can call this tag with:** <exemple_tag title='test'>this tag is working :D</exemple_tag>
 
    {...} it is a text between the tag
 --------------------
