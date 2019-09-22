@@ -74,6 +74,7 @@ Exemple:
    **You can call this tag with:** <exemple_tag title='test'>this tag is working :D</exemple_tag>
 
    {...} it is a text between the tag
+   
 --------------------
 
     
