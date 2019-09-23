@@ -31,5 +31,6 @@
         "whitelist":{
         }
     },
-    "hashCode": "2"
+    "hashCode": "2",
+    "error_reporting": true
 }

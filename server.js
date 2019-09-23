@@ -7,6 +7,7 @@ const $_COOKIE      = require('cookies');
 const md5           = require('md5');
 const $_FORMIDABLE  = require('formidable');
 
+var $_ERROR_REPORTING = $_CONFIG.error_reporting;
 var $_POST;
 var $_GET;
 var $_FILES;
@@ -24,6 +25,7 @@ var mysql;
 const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
     $_EVAL_BUFFER = [];
     $_STATUS = 200;
+    $_FILES = {};
 
     //COOKIES
     $_COOKIES = new $_COOKIE(_SYSTEMREQUEST, _SYSTEMRESPONSE, undefined);
@@ -45,7 +47,7 @@ const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
     $_GET = {};
     if(_SYSTEMREQUEST.url.includes('?')){
         for(var i = 0; i < _SYSTEMREQUEST.url.split('?')[1].split("&").length; i++)
-            $_GET[_SYSTEMREQUEST.url.split('?')[1].split('=')[0]] = _SYSTEMREQUEST.url.split('?')[1].split('=')[1]; 
+            $_GET[_SYSTEMREQUEST.url.split('?')[1].split('=')[0]] = decodeURI(_SYSTEMREQUEST.url.split('?')[1].split('=')[1]); 
     }
     
     //Catch POST
@@ -55,17 +57,17 @@ const $_SERVER = $_HTTP.createServer((_SYSTEMREQUEST, _SYSTEMRESPONSE) => {
         $_POST = {};
 
         for(var i = 0; i < $_POSTString.split('&').length; i++)
-            $_POST[$_POSTString.split('&')[i].split('=')[0]] = $_POSTString.split('&')[i].split('=')[1];
+            $_POST[$_POSTString.split('&')[i].split('=')[0]] = replaceAll($_POSTString.split('&')[i].split('=')[1],'+',' ');
         
     });
 
     //Catch Files
-    $_FILES = [];
     const $_FORM = new $_FORMIDABLE.IncomingForm();
     $_FORM.parse(_SYSTEMREQUEST, function (err, fields, files) {
-        var $_fs = Object.keys(files);
-        for(var i = 0; i < $_fs.length;i++)
-            $_FILES[$_fs[i]] = files[$_fs[i]];
+        var $_arq = Object.keys(files);
+        for(var i = 0; i < $_arq.length;i++){
+            $_POST[$_arq[i]] = files[$_arq[i]];
+        }
     });
 
     //Removes URL extension 
@@ -147,6 +149,7 @@ function _SYSTEMREADFILE(file){
             $_CONTENT = Buffer.from($_FS.readFileSync(file),'utf_8');
     
     }catch(e){
+        if($_ERROR_REPORTING)
         $_CONTENT = e.toString(); 
     }
     return $_CONTENT;
@@ -161,7 +164,7 @@ function _SYSTEMRUNJHP($_SYSTEMFILE)
     for(var $_SYSTEMX = 0; $_SYSTEMX < $_JHPCODE.length; $_SYSTEMX++)
     {
         //"Compile" code
-        try{ echo(eval($_JHPCODE[$_SYSTEMX])); } catch(e){ echo(e.toString()); }
+        try{ echo(eval($_JHPCODE[$_SYSTEMX])); } catch(e){ if($_ERROR_REPORTING) echo(e.toString()); }
         $_FILECONTENT = $_FILECONTENT.toString().replace("<jhp>" + $_JHPCODE[$_SYSTEMX] + "</jhp>", $_GET_EVAL_BUFFER());
     }
 
@@ -333,7 +336,8 @@ const MySql = {
                 if (err) echo(err.sqlMessage);
             });
         }catch(e){
-            echo(e);
+            if($_ERROR_REPORTING)
+                echo(e);
         }
     },
     query : function(sql,callback){
@@ -347,4 +351,8 @@ function replaceAll(string,key,value){
     for(var i = 0; i < l; i++)
         string = string.replace(key,value);
     return string;
+}
+
+function error_reporting(bool){
+    $_ERROR_REPORTING = bool;
 }
