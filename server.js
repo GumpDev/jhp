@@ -6,6 +6,7 @@ const $_MYSQL       = require('mysql');
 const $_COOKIE      = require('cookies');
 const md5           = require('md5');
 const $_FORMIDABLE  = require('formidable');
+const $_XML2JS      = require('xml2js').parseString;
 
 var $_ERROR_REPORTING = $_CONFIG.error_reporting;
 var $_POST;
@@ -174,20 +175,16 @@ function _SYSTEMRUNJHP($_SYSTEMFILE)
             var $_CUSTOMCODE = $_GETBETWEEN($_FILECONTENT, "<"+$_CUSTOMTAGS[x]+$_CODEARGS[y]+">", "</"+$_CUSTOMTAGS[x]+">");
             for(var $_SYSTEMX = 0; $_SYSTEMX < $_CUSTOMCODE.length; $_SYSTEMX++)
             {
+                var xml = "<"+$_CUSTOMTAGS[x]+$_CODEARGS[y]+">" + $_CUSTOMCODE[$_SYSTEMX] + "</"+$_CUSTOMTAGS[x]+">";
                 var $_FILEREADED = $_FS.readFileSync('custom_tags/'+$_CUSTOMTAGS[x]+".jhp");
-                $_FILEREADED = replaceAll($_FILEREADED.toString(),'{...}',$_CUSTOMCODE[$_SYSTEMX]);
+                $_XML2JS(xml, function (err, result) {
+                    $_FILEREADED = replaceAll($_FILEREADED.toString(),'{...}',result[$_CUSTOMTAGS[x]]['_']);
                 
-                if($_CODEARGS[y] != ""){
-                    var args2 = $_CODEARGS[y].split(' ').join('');
-                    var args  = args2.split('=');
-                    var i = 0;
-                    while(i < args.length){
-                        args[i+1] = replaceAll(args[i+1],'"','');
-                        args[i+1] = replaceAll(args[i+1],"'",'');
-                        $_FILEREADED = replaceAll($_FILEREADED.toString(),'{'+args[i]+'}',args[i+1]);
-                        i+=2;
+                    var args = Object.keys(result[$_CUSTOMTAGS[x]]['$']);
+                    for(var i = 0; i < args.length; i++){
+                        $_FILEREADED = replaceAll($_FILEREADED.toString(),'{'+args[i]+'}',result[$_CUSTOMTAGS[x]]['$'][args[i]]);
                     }
-                }
+                });
                 $_FILECONTENT = $_FILECONTENT.toString().replace("<"+$_CUSTOMTAGS[x]+$_CODEARGS[y]+">" + $_CUSTOMCODE[$_SYSTEMX] + "</"+$_CUSTOMTAGS[x]+">",_SYSTEMRUNJHP($_FILEREADED));
             }
         }
