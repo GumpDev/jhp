@@ -113,7 +113,14 @@ Exemple:
             });
          });`
    
+
+--------------------
    
+
+### SQL Server
+   * To start SQL Server, open the file: `startSql.bat`
+
+
 --------------------
 
     

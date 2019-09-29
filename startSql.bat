@@ -1,0 +1,2 @@
+node ./sqlServer.js
+pause
