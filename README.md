@@ -126,12 +126,19 @@ Exemple:
     
 ### We are working on
    * JHP UI Server
+   
       L File Manager
+      
       L Database Manager
+      
       L WebSocket Manager
+      
       L JHP Server Config
+      
       L Remote Control
+      
       L JHP Updater
+      
    * WebSocket Server
    * JHP Server Installer
    * Visual Studio And Sublime Text Extension to Interpret .jhp file
