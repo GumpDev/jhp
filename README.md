@@ -126,9 +126,14 @@ Exemple:
     
 ### We are working on
    * JHP UI Server
+      L File Manager
+      L Database Manager
+      L WebSocket Manager
+      L JHP Server Config
+      L Remote Control
+      L JHP Updater
+   * WebSocket Server
    * JHP Server Installer
-   * WebSocket
-   * More shortcuts
    * Visual Studio And Sublime Text Extension to Interpret .jhp file
     
   
@@ -141,6 +146,7 @@ Exemple:
    * path
    * cookies (https://github.com/pillarjs/cookies)
    * mysql (https://github.com/mysqljs/mysql)
+   * mysql-server (https://github.com/BrodaNoel/mysql-server)
 
     
 --------------------
